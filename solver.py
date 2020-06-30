@@ -48,4 +48,5 @@ def is_valid(board, x, y, n):
     return True
 
 
+print("git test")
 print_board(board)
