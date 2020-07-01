@@ -1,4 +1,4 @@
-board = [
+bo = [
     [7, 8, 0, 4, 0, 0, 1, 2, 0],
     [6, 0, 0, 0, 7, 5, 0, 0, 9],
     [0, 0, 0, 6, 0, 1, 0, 7, 8],
@@ -28,6 +28,25 @@ def print_board(board):
             else:
                 print(str(board[i][j]))
 
+# Solves a given Sudoku board using backtracking
+
+
+def solve(board):
+    for x in range(len(board)):
+        for y in range(len(board)):
+            if board[x][y] == 0:
+                for n in range(1, 10):
+                    if is_valid(board, x, y, n):
+                        board[x][y] = n
+
+                        # Recursively solve the rest of the board
+                        if solve(board):
+                            return True
+
+                        # If incorrect, replace this number and backtrack
+                        board[x][y] = 0
+                return False
+    return True
 
 # Tests to see if value n is a valid number at location (x, y)
 
@@ -39,7 +58,7 @@ def is_valid(board, x, y, n):
             return False
     # Check same 3x3 cell
     x_cell = (x // 3) * 3
-    y_cell = (x // 3) * 3
+    y_cell = (y // 3) * 3
     for i in range(0, 3):
         for j in range(0, 3):
             if board[x_cell + i][y_cell + j] == n:
@@ -48,5 +67,5 @@ def is_valid(board, x, y, n):
     return True
 
 
-print("git test again")
-print_board(board)
+solve(bo)
+print_board(bo)
