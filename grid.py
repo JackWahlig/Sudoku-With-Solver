@@ -54,7 +54,7 @@ class Grid:
     def is_complete(self):
         for i in range(self.rows):
             for j in range(self.cols):
-                if not self.cells[i][j].valid:
+                if not(self.cells[i][j].valid):
                     return False
         return True
 
@@ -89,10 +89,8 @@ class Grid:
 
         # Check if placement is valid to keep track for completion
         if solver.is_valid(self.state, col, row, val):
-            print(True)
             self.cells[row][col].valid = True
         else:
-            print(False)
             self.cells[row][col].valid = False
 
         self.update_state()

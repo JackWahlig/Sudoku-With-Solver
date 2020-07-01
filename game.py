@@ -82,6 +82,7 @@ def main():
 
         if board.selected and key != None and board.is_selected_mutable():
             board.place(key)
+            key = None
             # Check if done
             if board.is_complete():
                 print("Complete! Congrats!")

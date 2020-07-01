@@ -38,14 +38,14 @@ def is_valid(board, x, y, n):
         return False
     # Check same row and column
     for i in range(0, len(board)):
-        if board[x][i] == n or board[i][y] == n:
+        if (board[x][i] == n and i != y) or (board[i][y] == n and i != x):
             return False
     # Check same 3x3 cell
     x_cell = (x // 3) * 3
     y_cell = (y // 3) * 3
     for i in range(0, 3):
         for j in range(0, 3):
-            if board[x_cell + i][y_cell + j] == n:
+            if board[x_cell + i][y_cell + j] == n and (x_cell != x and y_cell != y):
                 return False
 
     return True
