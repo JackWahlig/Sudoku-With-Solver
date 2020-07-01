@@ -10,24 +10,6 @@ bo = [
     [0, 4, 9, 2, 0, 6, 0, 0, 7]
 ]
 
-# Prints out 9x9 sudoku grid. For testing prior to GUI implementation
-
-
-def print_board(board):
-
-    for i in range(len(board)):
-        if i != 0 and i % 3 == 0:
-            print()
-
-        for j in range(len(board[0])):
-            if j != 0 and j % 3 == 0:
-                print(" ", end="")
-
-            if j != 8:
-                print(str(board[i][j]) + " ", end="")
-            else:
-                print(str(board[i][j]))
-
 # Solves a given Sudoku board using backtracking
 
 
@@ -52,6 +34,8 @@ def solve(board):
 
 
 def is_valid(board, x, y, n):
+    if n > 9 or n < 1:
+        return False
     # Check same row and column
     for i in range(0, len(board)):
         if board[x][i] == n or board[i][y] == n:
@@ -66,6 +50,20 @@ def is_valid(board, x, y, n):
 
     return True
 
+# Prints out 9x9 sudoku grid. For testing prior to GUI implementation
 
-solve(bo)
-print_board(bo)
+
+def print_board(board):
+
+    for i in range(len(board)):
+        if i != 0 and i % 3 == 0:
+            print()
+
+        for j in range(len(board[0])):
+            if j != 0 and j % 3 == 0:
+                print(" ", end="")
+
+            if j != 8:
+                print(str(board[i][j]) + " ", end="")
+            else:
+                print(str(board[i][j]))
