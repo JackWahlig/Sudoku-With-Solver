@@ -74,9 +74,14 @@ def main():
 
             # Clicks
             if event.type == pygame.MOUSEBUTTONDOWN:
+                solve_button = pygame.Rect(5, 550, 100, 40)
                 position = pygame.mouse.get_pos()
                 click_position = board.get_click_pos(position)
-                if click_position:
+                # Solve if solve button is pressed
+                if solve_button.collidepoint(position):
+                    solver.solve(board, window, formatted_time(running_time))
+                # Moved to valid space if clicked on game board
+                elif click_position:
                     board.select(click_position[0], click_position[1])
                     key = None
 
@@ -95,10 +100,16 @@ def main():
 def redraw_window(window, board, time):
     window.fill((255, 255, 255))
 
-    # Time
+    # Solver button
+    solve_button = pygame.Rect(5, 550, 100, 40)
+    pygame.draw.rect(window, (250, 60, 60), solve_button)
     font = pygame.font.SysFont("Arial", 40)
+    text = font.render("Solve", 1, (0, 0, 0))
+    window.blit(text, (14, 546))
+
+    # Time
     text = font.render("Time: " + formatted_time(time), 1, (0, 0, 0))
-    window.blit(text, (540 - 220, 550))
+    window.blit(text, (540 - 220, 546))
 
     board.draw(window)
 

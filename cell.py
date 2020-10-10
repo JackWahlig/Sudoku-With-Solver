@@ -20,12 +20,14 @@ class Cell:
         x = self.col * space
         y = self.row * space
 
-        # Cell has a value
+        # Print Cell value
+        font.set_bold(not self.mutable)
         if not(self.val == 0):
-            font.set_bold(not self.mutable)
             text = font.render(str(self.val), 1, (0, 0, 0))
-            window.blit(text, (x + (space/2 - text.get_width()/2),
-                               y + (space/2 - text.get_height()/2)))
+        else:
+            text = font.render(' ', 1, (0, 0, 0))
+        window.blit(text, (x + (space/2 - text.get_width()/2),
+                           y + (space/2 - text.get_height()/2)))
 
         if self.selected:
             pygame.draw.rect(window, (255, 0, 0), (x, y, space, space), 3)

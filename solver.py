@@ -1,32 +1,47 @@
+import pygame
+
 bo = [
-    [7, 8, 0, 4, 0, 0, 1, 2, 0],
-    [6, 0, 0, 0, 7, 5, 0, 0, 9],
-    [0, 0, 0, 6, 0, 1, 0, 7, 8],
-    [0, 0, 7, 0, 4, 0, 2, 6, 0],
-    [0, 0, 1, 0, 5, 0, 9, 3, 0],
-    [9, 0, 4, 0, 6, 0, 0, 0, 5],
-    [0, 7, 0, 3, 0, 0, 0, 1, 2],
-    [1, 2, 0, 0, 0, 7, 4, 0, 0],
-    [0, 4, 9, 2, 0, 6, 0, 0, 7]
+    [0, 4, 0, 0, 0, 6, 0, 0, 7],
+    [1, 0, 0, 0, 0, 2, 4, 6, 9],
+    [0, 0, 0, 0, 0, 1, 0, 5, 0],
+    [0, 7, 9, 6, 0, 3, 2, 8, 0],
+    [2, 8, 0, 4, 0, 0, 0, 0, 0],
+    [0, 6, 0, 2, 0, 8, 9, 1, 0],
+    [0, 2, 0, 0, 0, 0, 0, 0, 0],
+    [8, 1, 4, 3, 0, 7, 0, 0, 0],
+    [0, 0, 0, 0, 9, 0, 0, 0, 0]
 ]
 
 # Solves a given Sudoku board using backtracking
+# Needs to be a grid in order to be solved with visualizer
 
 
-def solve(board):
-    for x in range(len(board)):
-        for y in range(len(board)):
-            if board[x][y] == 0:
+def solve(board, window, time):
+    for y in range(board.rows):
+        for x in range(board.cols):
+            if board.cells[x][y].val == 0:
+                board.select(x, y)
                 for n in range(1, 10):
-                    if is_valid(board, x, y, n):
-                        board[x][y] = n
+                    board.place(n)
+                    redraw_window_while_solving(window, board, time)
+                    pygame.display.update()
+                    if is_valid(board.state, y, x, n):
+                        #board[x][y] = n
 
                         # Recursively solve the rest of the board
-                        if solve(board):
+                        if solve(board, window, time):
                             return True
 
                         # If incorrect, replace this number and backtrack
-                        board[x][y] = 0
+                        #board[x][y] = 0
+                        board.select(x, y)
+                        board.place(0)
+                        redraw_window_while_solving(window, board, time)
+                        pygame.display.update()
+                    else:
+                        board.place(0)
+                        board.draw(window)
+                        pygame.display.update()
                 return False
     return True
 
@@ -45,7 +60,7 @@ def is_valid(board, x, y, n):
     y_cell = (y // 3) * 3
     for i in range(0, 3):
         for j in range(0, 3):
-            if board[x_cell + i][y_cell + j] == n and (x_cell != x and y_cell != y):
+            if board[x_cell + i][y_cell + j] == n and (x_cell + i != x and y_cell + j != y):
                 return False
 
     return True
@@ -67,3 +82,24 @@ def print_board(board):
                 print(str(board[i][j]) + " ", end="")
             else:
                 print(str(board[i][j]))
+
+# Extra redraw_window so that the solver can redraw the window itself
+# Alternatively could move solver methods into game file but I wanted
+# to keep them separated
+
+
+def redraw_window_while_solving(window, board, time):
+    window.fill((255, 255, 255))
+
+    # Solver button
+    solve_button = pygame.Rect(5, 550, 100, 40)
+    pygame.draw.rect(window, (250, 60, 60), solve_button)
+    font = pygame.font.SysFont("Arial", 40)
+    text = font.render("Solve", 1, (0, 0, 0))
+    window.blit(text, (14, 546))
+
+    # Time
+    text = font.render("Time: " + time, 1, (0, 0, 0))
+    window.blit(text, (540 - 220, 546))
+
+    board.draw(window)
